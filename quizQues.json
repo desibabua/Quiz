@@ -1,0 +1,32 @@
+[
+  {
+    "Question": "how many bones does a adult have ? ",
+    "options": [206,306,208,207],
+    "answer": "a"
+  },
+  {
+    "Question": "how many days are there in a leap year ? ",
+    "options": [366,356,355,365],
+    "answer": "a"
+  },
+  {
+    "Question": "calculate 12 - 2 * 4 ? ",
+    "options": [2,5,40,4],
+    "answer": "d"
+  },
+  {
+    "Question": "how many MB in a GB ? ",
+    "options": [1000,1024,1028,1021],
+    "answer": "b"
+  },
+  {
+    "Question": "how many planets are in our solarsystem ? ",
+    "options": [7,8,9,6],
+    "answer": "b"
+  },
+  {
+    "Question": "how many legs does a spider have ? ",
+    "options": [6,7,8,10],
+    "answer": "c"
+  }
+]

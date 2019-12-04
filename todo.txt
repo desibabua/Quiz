@@ -1,0 +1,13 @@
+--done-- change dataStructure
+--done-- should give next question without delay
+--done-- make wait for sometime after display question
+--done-- make counter
+
+--done-- set timer for each question
+--done-- catch uncaught error
+
+--done-- show the next question whether previous is wrong   
+--pending-- clear screen before new question
+show countdown
+random question
+display score before exit
