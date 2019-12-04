@@ -8,6 +8,8 @@
 
 --done-- show the next question whether previous is wrong   
 --pending-- clear screen before new question
+
 show countdown
 random question
-display score before exit
+--current-- display score before exit
+modify main
