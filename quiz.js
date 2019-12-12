@@ -1,60 +1,66 @@
-let { stdin, stdout } = process;
-let questions = require("./quizQues.json");
-let correctAnsCount = 0;
+const { stdin, stdout } = process;
+stdin.setEncoding("utf8");
 
-const setTimer = () => {
-  return setTimeout(() => {
-    stdout.write("timeout...\n");
-    stdin.emit("data");
-  }, 10000);
+const validateAns = function(quesDetails, answer) {
+  const correctAns = `${quesDetails.questions[quesDetails.count].answer}\n`;
+  return answer == correctAns;
 };
 
-const displayQues = ques => {
+const displayNextQues = function(quesDetails) {
+  stdout.write("timeout...\n");
+  quesDetails.count = quesDetails.count + 1;
+  if (quesDetails.count == quesDetails.questions.length) {
+    stopQuiz(quesDetails);
+  }
+  displayQues(quesDetails);
+};
+
+const displayQues = function(quesDetails) {
+  const ques = quesDetails.questions[quesDetails.count];
   stdout.write(`Question:  ${ques.Question}\n`);
   stdout.write(`a. ${ques.options[0]}\n`);
   stdout.write(`b. ${ques.options[1]}\n`);
   stdout.write(`c. ${ques.options[2]}\n`);
   stdout.write(`d. ${ques.options[3]}\n`);
+
+  quesDetails.setTimer = setTimeout(displayNextQues, 4000, quesDetails);
 };
 
-const validateAns = function(question, answer) {
-  const correctAns = `${question["answer"]}\n`;
-  return answer == correctAns;
-};
-
-const setEnvForQuestion = function(count) {
-  displayQues(questions[count]);
-  let timer = setTimer();
-  return timer;
-};
-
-function displayIsAnsCorrectOrWrong(answer, count) {
+displayAnsResult = function(quesDetails, answer) {
   let result = "wrong";
-  if (validateAns(questions[count], answer)) {
+  const ques = quesDetails.questions[quesDetails.count];
+
+  if (validateAns(quesDetails, answer)) {
     result = "correct";
-    correctAnsCount += 1;
+    quesDetails.scores += 1;
   }
   stdout.write(`\nyour ans was ${result}......\n`);
-}
+};
 
-const main = function() {
-  let count = 0;
-  let timeForQuestion = setEnvForQuestion(count);
+const stopQuiz = function(quesDetails) {
+  stdout.write("quiz is over..\n");
+  stdout.write(`your total scores : ${quesDetails.scores * 5}/30 \n`);
+  process.exit();
+};
+
+const checkAns = function(quesDetails) {
   stdin.on("data", answer => {
-    answer && displayIsAnsCorrectOrWrong(answer, count);
-    clearTimeout(timeForQuestion);
-    count += 1;
-    timeForQuestion = setEnvForQuestion(count);
+    clearTimeout(quesDetails.setTimer);
+    if (quesDetails.count == quesDetails.questions.length - 1) {
+      stopQuiz(quesDetails);
+    }
+
+    displayAnsResult(quesDetails, answer);
+    quesDetails.count = quesDetails.count + 1;
+    displayQues(quesDetails);
   });
 };
 
-process.on("uncaughtException", () => {
-  stdout.write("quiz is over..\n");
-  process.exit(0);
-});
-
-process.on("exit", () => {
-  stdout.write(`your total scores : ${correctAnsCount * 5}/30 \n`);
-});
+const main = function() {
+  const questions = require("./quizQues.json");
+  const quesDetails = { count: 0, scores: 0, questions, setTimer: {} };
+  displayQues(quesDetails);
+  checkAns(quesDetails);
+};
 
 main();
